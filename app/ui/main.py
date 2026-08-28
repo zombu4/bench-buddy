@@ -540,6 +540,11 @@ class MainWindow(QMainWindow):
 
         quit_action = QAction("&Quit", self)
         quit_action.setShortcut(QKeySequence.Quit)
+        # Stated rather than inferred. On macOS Qt guesses a menu role from the
+        # action's text and relocates it into the application menu; saying which
+        # role this is keeps Cmd+Q behaving the same way regardless of how the
+        # label is worded or translated.
+        quit_action.setMenuRole(QAction.MenuRole.QuitRole)
         quit_action.setStatusTip(
             "Hand the instrument back and close the application"
         )
@@ -1783,7 +1788,27 @@ class MainWindow(QMainWindow):
             return
         self._shutdown_done = True
         self._shutdown_ok = True
+        self._finish_quit()
+
+    def _finish_quit(self) -> None:
+        """Close the window and end the process.
+
+        ``close()`` alone is not enough. The handover is asynchronous, so the
+        first close request is always refused with ``event.ignore()`` while the
+        instrument is put back — and on macOS refusing that event *cancels the
+        application quit* that Cmd+Q started. The window would then close when
+        the handover finished, but the process stayed alive, so quitting
+        appeared to need two attempts.
+
+        Relying on Qt's quit-on-last-window-closed instead is not dependable
+        here either: any surviving top-level widget, such as the connection
+        dialog, keeps the application running. Ending it explicitly is the only
+        behaviour that is the same on all three platforms.
+        """
         self.close()
+        app = QApplication.instance()
+        if app is not None:
+            app.quit()
 
     def _shutdown_timed_out(self) -> None:
         if self._shutdown_done:
@@ -1795,7 +1820,7 @@ class MainWindow(QMainWindow):
             f"{SHUTDOWN_TIMEOUT_MS / 1000:g} s; the instrument may still be in "
             "remote — press [Local] on its front panel\n"
         )
-        self.close()
+        self._finish_quit()
 
 
 def _env_flag(name: str) -> bool:
