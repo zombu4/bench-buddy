@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Info.plist for "Bench Buddy.app".
+
+  PyInstaller's BUNDLE step writes an equivalent plist from the dictionary in
+  packaging/bench-buddy.spec; build_macos.sh then overlays this file, with
+  @VERSION@ substituted from app/__init__.py, so that the shipped plist is the
+  one that is reviewable here in the repository rather than one assembled at
+  build time.  Keep the two in step if you edit either.
+-->
+<plist version="1.0">
+<dict>
+    <key>CFBundleName</key>
+    <string>Bench Buddy</string>
+    <key>CFBundleDisplayName</key>
+    <string>Bench Buddy</string>
+    <key>CFBundleExecutable</key>
+    <string>bench-buddy</string>
+    <key>CFBundleIdentifier</key>
+    <string>com.github.benchbuddy</string>
+    <key>CFBundleInfoDictionaryVersion</key>
+    <string>6.0</string>
+    <key>CFBundlePackageType</key>
+    <string>APPL</string>
+    <key>CFBundleSignature</key>
+    <string>????</string>
+    <key>CFBundleShortVersionString</key>
+    <string>@VERSION@</string>
+    <key>CFBundleVersion</key>
+    <string>@VERSION@</string>
+    <key>CFBundleIconFile</key>
+    <string>icon.icns</string>
+
+    <!-- Apple silicon and Intel; the build script decides which it produced. -->
+    <key>LSMinimumSystemVersion</key>
+    <string>11.0</string>
+    <key>LSApplicationCategoryType</key>
+    <string>public.app-category.utilities</string>
+
+    <!-- The window is drawn from the application's own dark palette and does
+         not follow the system appearance, so opting out of Aqua's automatic
+         light-mode treatment keeps the title bar consistent with it. -->
+    <key>NSRequiresAquaSystemAppearance</key>
+    <false/>
+    <key>NSHighResolutionCapable</key>
+    <true/>
+    <key>NSPrincipalClass</key>
+    <string>NSApplication</string>
+    <key>NSSupportsAutomaticGraphicsSwitching</key>
+    <true/>
+
+    <!-- macOS 15 and later prompt once before an app may reach devices on the
+         local network.  The instrument is exactly that: a raw TCP socket to
+         port 5025 on the bench LAN.  Without this key the prompt has no
+         explanation, and on some configurations is denied outright. -->
+    <key>NSLocalNetworkUsageDescription</key>
+    <string>Connects to the Keysight 34461A multimeter on your local network over SCPI (TCP port 5025).</string>
+
+    <key>NSHumanReadableCopyright</key>
+    <string>Bundled fonts are licensed under the SIL Open Font License; see the OFL files inside the application bundle.</string>
+
+    <!-- The app takes no document types and registers no URL schemes. -->
+    <key>CFBundleDocumentTypes</key>
+    <array/>
+</dict>
+</plist>

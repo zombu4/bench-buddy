@@ -1,0 +1,8 @@
+# Bench Buddy - runtime dependencies
+# Everything here is bundled into the installers; no target machine needs them.
+PySide6>=6.6
+numpy>=1.26
+pillow>=10.0
+
+# Build-time only (not shipped inside the app):
+#   pyinstaller>=6.0

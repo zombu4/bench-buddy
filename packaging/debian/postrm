@@ -1,0 +1,29 @@
+#!/bin/sh
+# Post-removal for bench-buddy: refresh the caches the desktop entry was in.
+set -e
+
+case "$1" in
+    remove|purge)
+        if command -v update-desktop-database >/dev/null 2>&1; then
+            update-desktop-database -q /usr/share/applications || true
+        fi
+        if command -v gtk-update-icon-cache >/dev/null 2>&1; then
+            gtk-update-icon-cache -q -t -f /usr/share/icons/hicolor || true
+        fi
+        # PyInstaller writes nothing into /opt at runtime, but a crash handler
+        # or a stray __pycache__ would leave the directory behind.
+        if [ "$1" = purge ] && [ -d /opt/bench-buddy ]; then
+            rm -rf /opt/bench-buddy
+        fi
+        ;;
+
+    upgrade|failed-upgrade|abort-install|abort-upgrade|disappear)
+        ;;
+
+    *)
+        echo "postrm called with unknown argument \`$1'" >&2
+        exit 1
+        ;;
+esac
+
+exit 0

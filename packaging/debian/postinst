@@ -1,0 +1,47 @@
+#!/bin/sh
+# Post-installation for bench-buddy.
+#
+# The payload is a PyInstaller one-folder bundle unpacked at /opt/bench-buddy.
+# All this script does is make it reachable and visible: a symlink on PATH and
+# the desktop/icon caches refreshed.  It writes nothing outside the paths dpkg
+# already owns.
+set -e
+
+BINDIR=/usr/bin
+TARGET=/opt/bench-buddy/bench-buddy
+LINK=$BINDIR/bench-buddy
+
+case "$1" in
+    configure)
+        # The launcher must be executable even if the archive lost the bit.
+        if [ -f "$TARGET" ]; then
+            chmod 0755 "$TARGET"
+        fi
+
+        # Symlink onto PATH.  update-alternatives would be overkill: there is
+        # only ever one provider of this name.
+        if [ -e "$LINK" ] || [ -L "$LINK" ]; then
+            rm -f "$LINK"
+        fi
+        ln -s "$TARGET" "$LINK"
+
+        # Refresh the desktop database and icon cache if the tools are present.
+        # They are not dependencies -- a headless install simply skips this.
+        if command -v update-desktop-database >/dev/null 2>&1; then
+            update-desktop-database -q /usr/share/applications || true
+        fi
+        if command -v gtk-update-icon-cache >/dev/null 2>&1; then
+            gtk-update-icon-cache -q -t -f /usr/share/icons/hicolor || true
+        fi
+        ;;
+
+    abort-upgrade|abort-remove|abort-deconfigure)
+        ;;
+
+    *)
+        echo "postinst called with unknown argument \`$1'" >&2
+        exit 1
+        ;;
+esac
+
+exit 0

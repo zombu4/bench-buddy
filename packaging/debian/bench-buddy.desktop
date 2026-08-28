@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=Bench Buddy
+GenericName=Multimeter Console
+Comment=Control a Keysight 34461A bench multimeter over SCPI
+Exec=/usr/bin/bench-buddy
+Icon=bench-buddy
+Terminal=false
+Categories=Science;Electronics;Engineering;
+Keywords=multimeter;DMM;Keysight;34461A;SCPI;instrument;measurement;
+StartupNotify=true
+StartupWMClass=bench-buddy

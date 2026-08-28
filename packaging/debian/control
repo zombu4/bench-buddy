@@ -1,0 +1,20 @@
+Package: bench-buddy
+Version: @VERSION@
+Section: electronics
+Priority: optional
+Architecture: amd64
+Maintainer: zombu4 <zombu4@users.noreply.github.com>
+License: GPL-3.0-or-later
+Installed-Size: @INSTALLED_SIZE@
+Depends: libc6 (>= @GLIBC@), libstdc++6, libgcc-s1, libx11-6, libxext6, libxrender1, libxcb1, libxcb-cursor0, libxcb-icccm4, libxcb-image0, libxcb-keysyms1, libxcb-randr0, libxcb-render0, libxcb-render-util0, libxcb-shape0, libxcb-shm0, libxcb-sync1, libxcb-xfixes0, libxcb-xinerama0, libxcb-xkb1, libxkbcommon0, libxkbcommon-x11-0, libfontconfig1, libfreetype6, libglib2.0-0, libdbus-1-3, libgl1, libegl1
+Recommends: libxcb-util1
+Description: Control console for the Keysight 34461A bench multimeter
+ A desktop console for the Keysight 34461A Truevolt digital multimeter,
+ speaking raw SCPI over TCP port 5025.  It gives the instrument a
+ resolution-aware readout, a live strip chart and histogram, a data log with
+ CSV export, a SCPI console, and single-shot capture of the instrument's own
+ screen.
+ .
+ The package is self-contained: it bundles its own Python interpreter, Qt 6,
+ NumPy, Pillow and its four typefaces.  Nothing beyond the system C library
+ and the X11/xcb libraries Qt links against needs to be installed.

@@ -1,0 +1,30 @@
+# Build output
+/build/
+/dist/
+*.spec.bak
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+
+# Packaging artifacts
+*.exe
+*.dmg
+*.deb
+*.zip
+*.tar.gz
+
+# Probe reports (may contain instrument identity)
+probe-*.json
+probe-*.md
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini

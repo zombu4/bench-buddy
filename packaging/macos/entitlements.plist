@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Entitlements for "Bench Buddy.app".
+
+  Read this honestly: with the ad-hoc signature this build uses (no Apple
+  Developer account, see README), the hardened runtime is not enabled and most
+  of these entitlements are inert. They are here so that if the project ever
+  does acquire a Developer ID, signing with `codesign` under the hardened runtime option
+  against this file produces a bundle that runs, rather than one that has to be
+  debugged under notarisation.
+
+  Why each is needed:
+
+  network.client
+      The whole point of the app: a raw TCP socket to the instrument on
+      port 5025.
+
+  files.user-selected.read-write
+      "Save PNG" on a captured frame and CSV export from the data log both go
+      through a save panel.
+
+  cs.disable-library-validation
+      A PyInstaller bundle dlopen()s Qt plugins and CPython extension modules
+      signed with a different identity, or not signed at all. Under the
+      hardened runtime, library validation rejects them and the app dies at
+      startup on the Qt platform plugin. This is the standard, unavoidable
+      exception for frozen Python applications.
+
+  Deliberately NOT requested: camera, microphone, location, address book,
+  calendars, photo library, Apple Events, JIT, or unsigned executable memory.
+-->
+<plist version="1.0">
+<dict>
+    <key>com.apple.security.network.client</key>
+    <true/>
+    <key>com.apple.security.files.user-selected.read-write</key>
+    <true/>
+    <key>com.apple.security.cs.disable-library-validation</key>
+    <true/>
+</dict>
+</plist>

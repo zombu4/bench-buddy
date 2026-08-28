@@ -1,0 +1,25 @@
+# Normalise to LF in the repository. Without this, a Windows checkout can commit
+# CRLF into the shell scripts, and a CRLF `#!/usr/bin/env bash` fails on Linux
+# and macOS with "bad interpreter: no such file or directory" - which would break
+# the Debian and macOS builds while working fine on the machine that pushed them.
+* text=auto eol=lf
+
+# Executed on Linux/macOS: must be LF.
+*.sh            text eol=lf
+*.desktop       text eol=lf
+packaging/debian/postinst  text eol=lf
+packaging/debian/prerm     text eol=lf
+packaging/debian/postrm    text eol=lf
+
+# Windows-only tooling: native CRLF is correct here.
+*.ps1           text eol=crlf
+*.iss           text eol=crlf
+*.bat           text eol=crlf
+*.cmd           text eol=crlf
+
+# Binary assets: never touch.
+*.png           binary
+*.ico           binary
+*.icns          binary
+*.ttf           binary
+*.otf           binary
